@@ -1,5 +1,6 @@
 BIN_IMAGE = blockbook-build
 DEB_IMAGE = blockbook-build-deb
+DOCKER_IMAGE = blockbook
 PACKAGER = $(shell id -u):$(shell id -g)
 NO_CACHE = false
 ARGS ?=
@@ -7,6 +8,11 @@ ARGS ?=
 TARGETS=$(subst .json,, $(shell ls configs/coins))
 
 .PHONY: build build-debug test deb
+
+build-docker: build .docker-image
+
+.docker-image:
+    docker build --no-cache=$(NO_CACHE) -t $(DOCKER_IMAGE) -f build/docker/image/Dockerfile .
 
 build: .bin-image
 	docker run -t --rm -e PACKAGER=$(PACKAGER) -v "$(CURDIR):/src" -v "$(CURDIR)/build:/out" $(BIN_IMAGE) make build ARGS="$(ARGS)"
