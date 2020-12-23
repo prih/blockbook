@@ -440,6 +440,7 @@ func (w *Worker) getAddressTxids(addrDesc bchain.AddressDescriptor, mempool bool
 	var callback db.GetTransactionsCallback
 	if filter.Vout == AddressFilterVoutOff {
 		callback = func(txid string, height uint32, indexes []int32) error {
+			fmt.Println(txid)
 			txids = append(txids, txid)
 			if len(txids) >= maxResults {
 				return &db.StopIteration{}
