@@ -376,15 +376,12 @@ func (d *RocksDB) GetAddrDescTransactions(addrDesc bchain.AddressDescriptor, low
 	addrDescLen := len(addrDesc)
 	startKey := packAddressKey(addrDesc, higher)
 	stopKey := packAddressKey(addrDesc, lower)
-	fmt.Println(startKey)
-	fmt.Println(stopKey)
 	indexes := make([]int32, 0, 16)
 	it := d.db.NewIteratorCF(d.ro, d.cfh[cfAddresses])
 	defer it.Close()
-	for it.Seek(stopKey); it.Valid(); it.Prev() {
+	for it.Seek(startKey); it.Valid(); it.Next() {
 		key := it.Key().Data()
-		fmt.Println(key)
-		if bytes.Compare(key, startKey) < 0 {
+		if bytes.Compare(key, stopKey) > 0 {
 			break
 		}
 		if len(key) != addrDescLen+packedHeightBytes {
