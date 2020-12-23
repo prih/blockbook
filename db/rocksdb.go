@@ -381,9 +381,9 @@ func (d *RocksDB) GetAddrDescTransactions(addrDesc bchain.AddressDescriptor, low
 	indexes := make([]int32, 0, 16)
 	it := d.db.NewIteratorCF(d.ro, d.cfh[cfAddresses])
 	defer it.Close()
-	for it.Seek(startKey); it.Valid(); it.Next() {
+	for it.Seek(stopKey); it.Valid(); it.Prev() {
 		key := it.Key().Data()
-		if bytes.Compare(key, stopKey) > 0 {
+		if bytes.Compare(key, startKey) < 0 {
 			break
 		}
 		if len(key) != addrDescLen+packedHeightBytes {
