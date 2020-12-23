@@ -15,4 +15,3 @@ build/*.deb
 .bin-image
 .deb-image
 \.idea/
-build/docker/image
