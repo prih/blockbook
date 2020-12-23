@@ -895,6 +895,7 @@ func (w *Worker) GetAddress(address string, page int, txsOnPage int, option Acco
 	// get tx history if requested by option or check mempool if there are some transactions for a new address
 	if option >= AccountDetailsTxidHistory && filter.Vout != AddressFilterVoutQueryNotNecessary {
 		txc, err := w.getAddressTxids(addrDesc, false, filter, (page+1)*txsOnPage)
+		fmt.Println(txc)
 		if err != nil {
 			return nil, errors.Annotatef(err, "getAddressTxids %v false", addrDesc)
 		}
