@@ -1134,6 +1134,7 @@ func (s *PublicServer) apiSendTx(r *http.Request, apiVersion int) (interface{}, 
 	var res resultSendTransaction
 	var hex string
 	s.metrics.ExplorerViews.With(common.Labels{"action": "api-sendtx"}).Inc()
+	fmt.Println(r.Method)
 	if r.Method == http.MethodPost {
 		data, err := ioutil.ReadAll(r.Body)
 		fmt.Println(data)
