@@ -1136,9 +1136,10 @@ func (s *PublicServer) apiSendTx(r *http.Request, apiVersion int) (interface{}, 
 	s.metrics.ExplorerViews.With(common.Labels{"action": "api-sendtx"}).Inc()
 	if r.Method == http.MethodPost {
 		data, err := ioutil.ReadAll(r.Body)
+		fmt.Println(data)
+		fmt.Println(err)
 		if err != nil {
-			fmt.Println(err)
-			return nil, api.NewAPIError("Missing tx blob", true)
+			return nil, api.NewAPIError("Missing read tx blob", true)
 		}
 		hex = string(data)
 	} else {
