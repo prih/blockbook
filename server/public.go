@@ -1137,6 +1137,7 @@ func (s *PublicServer) apiSendTx(r *http.Request, apiVersion int) (interface{}, 
 	if r.Method == http.MethodPost {
 		data, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			fmt.Println(err)
 			return nil, api.NewAPIError("Missing tx blob", true)
 		}
 		hex = string(data)

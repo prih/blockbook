@@ -472,8 +472,7 @@ func (w *Worker) GetXpubAddress(xpub string, page int, txsOnPage int, option Acc
 				}
 			}
 		}
-		// sort.Stable(txc)
-		sort.SliceStable(txc, func(i, j int) bool { return txc[i].height < txc[j].height })
+		sort.Stable(txc)
 		txCount = len(txcMap)
 		totalResults := txCount
 		if filtered {
