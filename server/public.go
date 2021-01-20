@@ -1255,7 +1255,15 @@ func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interfac
 			return nil, api.NewAPIError("Parse body error", true)
 		}
 
-		fee, err = s.chain.EthereumTypeEstimateGas(r.Form)
+		reqBody := map[string]interface{
+			"from": r.FormValue("from"),
+			"to": r.FormValue("to"),
+			"data": r.FormValue("data"),
+			"value": r.FormValue("value")
+		}
+
+		var fee uint64;
+		fee, err = s.chain.EthereumTypeEstimateGas(reqBody)
 		if err != nil {
 			return nil, err
 		}
