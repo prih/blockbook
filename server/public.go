@@ -1268,7 +1268,7 @@ func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interfac
 			return nil, err
 		}
 
-		res.Result = s.chainParser.AmountToDecimalString(&fee)
+		res.Result = strconv.Itoa(&fee)
 		return res, nil
 	}
 
