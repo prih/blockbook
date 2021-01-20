@@ -1261,6 +1261,8 @@ func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interfac
 		form["to"] = r.FormValue("to")
 		form["data"] = r.FormValue("data")
 		form["value"] = r.FormValue("value")
+		form["gas"] = r.FormValue("gas")
+		form["gasPrice"] = r.FormValue("gasPrice")
 
 		var fee uint64;
 		fee, err = s.chain.EthereumTypeEstimateGas(form)
