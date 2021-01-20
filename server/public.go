@@ -1255,7 +1255,7 @@ func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interfac
 			return nil, api.NewAPIError("Parse body error", true)
 		}
 
-		form := map[string]interface{}
+		form := map[string]interface{} {}
 
 		form["from"] = r.FormValue("from")
 		form["to"] = r.FormValue("to")
