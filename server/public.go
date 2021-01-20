@@ -186,6 +186,7 @@ func (s *PublicServer) ConnectFullPublicInterface() {
 	serveMux.HandleFunc(path+"api/v2/block/", s.jsonHandler(s.apiBlock, apiV2))
 	serveMux.HandleFunc(path+"api/v2/sendtx/", s.jsonHandler(s.apiSendTx, apiV2))
 	serveMux.HandleFunc(path+"api/v2/estimatefee/", s.jsonHandler(s.apiEstimateFee, apiV2))
+	serveMux.HandleFunc(path+"api/v2/estimategas/", s.jsonHandler(s.apiEstimateGas, apiV2))
 	serveMux.HandleFunc(path+"api/v2/feestats/", s.jsonHandler(s.apiFeeStats, apiV2))
 	serveMux.HandleFunc(path+"api/v2/balancehistory/", s.jsonHandler(s.apiBalanceHistory, apiDefault))
 	serveMux.HandleFunc(path+"api/v2/tickers/", s.jsonHandler(s.apiTickers, apiV2))
@@ -1242,4 +1243,26 @@ func (s *PublicServer) apiEstimateFee(r *http.Request, apiVersion int) (interfac
 		}
 	}
 	return nil, api.NewAPIError("Missing parameter 'number of blocks'", true)
+}
+
+func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interface{}, error) {
+	var res resultEstimateFeeAsString
+	s.metrics.ExplorerViews.With(common.Labels{"action": "api-estimategas"}).Inc()
+
+	if r.Method == http.MethodPost {
+		err := r.ParseForm();
+		if err != nil {
+			return nil, api.NewAPIError("Parse body error", true)
+		}
+
+		fee, err = s.chain.EthereumTypeEstimateGas(r.Form)
+		if err != nil {
+			return nil, err
+		}
+
+		res.Result = s.chainParser.AmountToDecimalString(&fee)
+		return res, nil
+	}
+
+	return nil, api.NewAPIError("Missing Request method", true)
 }
