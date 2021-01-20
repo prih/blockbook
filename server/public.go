@@ -1268,7 +1268,7 @@ func (s *PublicServer) apiEstimateGas(r *http.Request, apiVersion int) (interfac
 			return nil, err
 		}
 
-		res.Result = strconv.FormatUint(&fee, 10)
+		res.Result = strconv.FormatUint(fee, 10)
 		return res, nil
 	}
 
