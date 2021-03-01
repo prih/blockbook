@@ -269,6 +269,9 @@ func (w *Worker) GetTransactionFromBchainTx(bchainTx *bchain.Tx, height int, spe
 			Nonce:    ethTxData.Nonce,
 			Status:   ethTxData.Status,
 			Data:     ethTxData.Data,
+			V:        ethTxData.V,
+			R:        ethTxData.R,
+			S:        ethTxData.S,
 		}
 	}
 	// for now do not return size, we would have to compute vsize of segwit transactions
@@ -384,6 +387,9 @@ func (w *Worker) GetTransactionFromMempoolTx(mempoolTx *bchain.MempoolTx) (*Tx, 
 			Nonce:    ethTxData.Nonce,
 			Status:   ethTxData.Status,
 			Data:     ethTxData.Data,
+			V:        ethTxData.V,
+			R:        ethTxData.R,
+			S:        ethTxData.S,
 		}
 	}
 	r := &Tx{

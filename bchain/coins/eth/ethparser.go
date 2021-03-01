@@ -54,9 +54,9 @@ type rpcTransaction struct {
 	From             string `json:"from"`
 	TransactionIndex string `json:"transactionIndex"`
 	// Signature values - ignored
-	// V string `json:"v"`
-	// R string `json:"r"`
-	// S string `json:"s"`
+	V string `json:"v"`
+	R string `json:"r"`
+	S string `json:"s"`
 }
 
 type rpcLog struct {
@@ -491,6 +491,9 @@ type EthereumTxData struct {
 	GasUsed  *big.Int `json:"gasused"`
 	GasPrice *big.Int `json:"gasprice"`
 	Data     string   `json:"data"`
+	V        string   `json:"v"`
+	R        string   `json:"r"`
+	S        string   `json:"s"`
 }
 
 // GetEthereumTxData returns EthereumTxData from bchain.Tx
@@ -508,6 +511,9 @@ func GetEthereumTxDataFromSpecificData(coinSpecificData interface{}) *EthereumTx
 			etd.GasLimit, _ = hexutil.DecodeBig(csd.Tx.GasLimit)
 			etd.GasPrice, _ = hexutil.DecodeBig(csd.Tx.GasPrice)
 			etd.Data = csd.Tx.Payload
+			etd.V = csd.Tx.V
+			etd.R = csd.Tx.R
+			etd.S = csd.Tx.S
 		}
 		if csd.Receipt != nil {
 			switch csd.Receipt.Status {

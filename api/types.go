@@ -177,6 +177,9 @@ type EthereumSpecific struct {
 	GasUsed  *big.Int     `json:"gasUsed"`
 	GasPrice *Amount      `json:"gasPrice"`
 	Data     string       `json:"data,omitempty"`
+	V        string       `json:"v"`
+	R        string       `json:"r"`
+	S        string       `json:"s"`
 }
 
 // Tx holds information about a transaction
