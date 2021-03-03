@@ -287,15 +287,15 @@ func (p *EthereumParser) PackTx(tx *bchain.Tx, height uint32, blockTime int64) (
 	if pt.Tx.GasPrice, err = hexDecodeBig(r.Tx.GasPrice); err != nil {
 		return nil, errors.Annotatef(err, "Price %v", r.Tx.GasPrice)
 	}
-	// if pt.R, err = hexDecodeBig(r.R); err != nil {
-	// 	return nil, errors.Annotatef(err, "R %v", r.R)
-	// }
-	// if pt.S, err = hexDecodeBig(r.S); err != nil {
-	// 	return nil, errors.Annotatef(err, "S %v", r.S)
-	// }
-	// if pt.V, err = hexDecodeBig(r.V); err != nil {
-	// 	return nil, errors.Annotatef(err, "V %v", r.V)
-	// }
+	if pt.Tx.V, err = hexDecode(r.V); err != nil {
+		return nil, errors.Annotatef(err, "V %v", r.V)
+	}
+	if pt.Tx.R, err = hexDecode(r.R); err != nil {
+		return nil, errors.Annotatef(err, "R %v", r.R)
+	}
+	if pt.Tx.S, err = hexDecode(r.S); err != nil {
+		return nil, errors.Annotatef(err, "S %v", r.S)
+	}
 	if pt.Tx.To, err = hexDecode(r.Tx.To); err != nil {
 		return nil, errors.Annotatef(err, "To %v", r.Tx.To)
 	}
