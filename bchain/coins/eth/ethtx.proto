@@ -12,6 +12,9 @@ syntax = "proto3";
             bytes To = 7;
             bytes From = 8;
             uint32 TransactionIndex = 9;
+            bytes V = 10;
+            bytes R = 11;
+            bytes S = 12;
         } 
         message ReceiptType {
             message LogType {
