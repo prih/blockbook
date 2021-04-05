@@ -14,7 +14,7 @@ TARGETS=$(subst .json,, $(shell ls configs/coins))
 build-docker: build .docker-image
 
 .docker-image:
-        docker build --no-cache=$(NO_CACHE) -t $(DOCKER_IMAGE) -f build/docker/image/Dockerfile .
+	docker build --no-cache=$(NO_CACHE) -t $(DOCKER_IMAGE) -f build/docker/image/Dockerfile .
 
 build: .bin-image
 	docker run -t --rm -e PACKAGER=$(PACKAGER) -v "$(CURDIR):/src" -v "$(CURDIR)/build:/out" $(BIN_IMAGE) make build ARGS="$(ARGS)"
