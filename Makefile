@@ -1,8 +1,10 @@
 BIN_IMAGE = blockbook-build
 DEB_IMAGE = blockbook-build-deb
-DOCKER_IMAGE = blockbook
 PACKAGER = $(shell id -u):$(shell id -g)
+BASE_IMAGE = $$(awk -F= '$$1=="ID" { print $$2 ;}' /etc/os-release):$$(awk -F= '$$1=="VERSION_ID" { print $$2 ;}' /etc/os-release | tr -d '"')
+DOCKER_IMAGE = blockbook
 NO_CACHE = false
+TCMALLOC = 
 ARGS ?=
 
 TARGETS=$(subst .json,, $(shell ls configs/coins))
@@ -12,7 +14,7 @@ TARGETS=$(subst .json,, $(shell ls configs/coins))
 build-docker: build .docker-image
 
 .docker-image:
-	docker build --no-cache=$(NO_CACHE) -t $(DOCKER_IMAGE) -f build/docker/image/Dockerfile .
+        docker build --no-cache=$(NO_CACHE) -t $(DOCKER_IMAGE) -f build/docker/image/Dockerfile .
 
 build: .bin-image
 	docker run -t --rm -e PACKAGER=$(PACKAGER) -v "$(CURDIR):/src" -v "$(CURDIR)/build:/out" $(BIN_IMAGE) make build ARGS="$(ARGS)"
@@ -49,8 +51,8 @@ build-images: clean-images
 
 .bin-image:
 	@if [ $$(build/tools/image_status.sh $(BIN_IMAGE):latest build/docker) != "ok" ]; then \
-		echo "Building image $(BIN_IMAGE)..."; \
-		docker build --no-cache=$(NO_CACHE) -t $(BIN_IMAGE) build/docker/bin; \
+		echo "Building image $(BIN_IMAGE) from $(BASE_IMAGE)"; \
+		docker build --no-cache=$(NO_CACHE) --build-arg TCMALLOC=$(TCMALLOC) --build-arg BASE_IMAGE=$(BASE_IMAGE) -t $(BIN_IMAGE) build/docker/bin; \
 	else \
 		echo "Image $(BIN_IMAGE) is up to date"; \
 	fi

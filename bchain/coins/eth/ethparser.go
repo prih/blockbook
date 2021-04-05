@@ -54,9 +54,9 @@ type rpcTransaction struct {
 	From             string `json:"from"`
 	TransactionIndex string `json:"transactionIndex"`
 	// Signature values - ignored
-	V string `json:"v"`
-	R string `json:"r"`
-	S string `json:"s"`
+	// V string `json:"v"`
+	// R string `json:"r"`
+	// S string `json:"s"`
 }
 
 type rpcLog struct {
@@ -287,15 +287,15 @@ func (p *EthereumParser) PackTx(tx *bchain.Tx, height uint32, blockTime int64) (
 	if pt.Tx.GasPrice, err = hexDecodeBig(r.Tx.GasPrice); err != nil {
 		return nil, errors.Annotatef(err, "Price %v", r.Tx.GasPrice)
 	}
-	if pt.Tx.V, err = hexDecode(r.Tx.V); err != nil {
-		return nil, errors.Annotatef(err, "V %v", r.Tx.V)
-	}
-	if pt.Tx.R, err = hexDecode(r.Tx.R); err != nil {
-		return nil, errors.Annotatef(err, "R %v", r.Tx.R)
-	}
-	if pt.Tx.S, err = hexDecode(r.Tx.S); err != nil {
-		return nil, errors.Annotatef(err, "S %v", r.Tx.S)
-	}
+	// if pt.R, err = hexDecodeBig(r.R); err != nil {
+	// 	return nil, errors.Annotatef(err, "R %v", r.R)
+	// }
+	// if pt.S, err = hexDecodeBig(r.S); err != nil {
+	// 	return nil, errors.Annotatef(err, "S %v", r.S)
+	// }
+	// if pt.V, err = hexDecodeBig(r.V); err != nil {
+	// 	return nil, errors.Annotatef(err, "V %v", r.V)
+	// }
 	if pt.Tx.To, err = hexDecode(r.Tx.To); err != nil {
 		return nil, errors.Annotatef(err, "To %v", r.Tx.To)
 	}
@@ -364,9 +364,9 @@ func (p *EthereumParser) UnpackTx(buf []byte) (*bchain.Tx, uint32, error) {
 		Hash:         hexutil.Encode(pt.Tx.Hash),
 		Payload:      hexutil.Encode(pt.Tx.Payload),
 		GasPrice:     hexEncodeBig(pt.Tx.GasPrice),
-		V:                hexutil.Encode(pt.Tx.V),
-		R:                hexutil.Encode(pt.Tx.R),
-		S:                hexutil.Encode(pt.Tx.S),
+		// R:                hexEncodeBig(pt.R),
+		// S:                hexEncodeBig(pt.S),
+		// V:                hexEncodeBig(pt.V),
 		To:               EIP55Address(pt.Tx.To),
 		TransactionIndex: hexutil.EncodeUint64(uint64(pt.Tx.TransactionIndex)),
 		Value:            hexEncodeBig(pt.Tx.Value),
@@ -491,9 +491,6 @@ type EthereumTxData struct {
 	GasUsed  *big.Int `json:"gasused"`
 	GasPrice *big.Int `json:"gasprice"`
 	Data     string   `json:"data"`
-	V        string   `json:"v"`
-	R        string   `json:"r"`
-	S        string   `json:"s"`
 }
 
 // GetEthereumTxData returns EthereumTxData from bchain.Tx
@@ -511,9 +508,6 @@ func GetEthereumTxDataFromSpecificData(coinSpecificData interface{}) *EthereumTx
 			etd.GasLimit, _ = hexutil.DecodeBig(csd.Tx.GasLimit)
 			etd.GasPrice, _ = hexutil.DecodeBig(csd.Tx.GasPrice)
 			etd.Data = csd.Tx.Payload
-			etd.V = csd.Tx.V
-			etd.R = csd.Tx.R
-			etd.S = csd.Tx.S
 		}
 		if csd.Receipt != nil {
 			switch csd.Receipt.Status {

@@ -58,7 +58,7 @@ type PublicServer struct {
 
 // NewPublicServer creates new public server http interface to blockbook and returns its handle
 // only basic functionality is mapped, to map all functions, call
-func NewPublicServer(binding string, certFiles string, db *db.RocksDB, chain bchain.BlockChain, mempool bchain.Mempool, txCache *db.TxCache, explorerURL string, metrics *common.Metrics, is *common.InternalState, debugMode bool) (*PublicServer, error) {
+func NewPublicServer(binding string, certFiles string, db *db.RocksDB, chain bchain.BlockChain, mempool bchain.Mempool, txCache *db.TxCache, explorerURL string, metrics *common.Metrics, is *common.InternalState, debugMode bool, enableSubNewTx bool) (*PublicServer, error) {
 
 	api, err := api.NewWorker(db, chain, mempool, txCache, is)
 	if err != nil {
@@ -70,7 +70,7 @@ func NewPublicServer(binding string, certFiles string, db *db.RocksDB, chain bch
 		return nil, err
 	}
 
-	websocket, err := NewWebsocketServer(db, chain, mempool, txCache, metrics, is)
+	websocket, err := NewWebsocketServer(db, chain, mempool, txCache, metrics, is, enableSubNewTx)
 	if err != nil {
 		return nil, err
 	}
@@ -441,6 +441,7 @@ func (s *PublicServer) parseTemplates() []*template.Template {
 		"setTxToTemplateData":      setTxToTemplateData,
 		"isOwnAddress":             isOwnAddress,
 		"isOwnAddresses":           isOwnAddresses,
+		"toJSON":                   toJSON,
 	}
 	var createTemplate func(filenames ...string) *template.Template
 	if s.debug {
@@ -506,6 +507,14 @@ func formatUnixTime(ut int64) string {
 
 func formatTime(t time.Time) string {
 	return t.Format(time.RFC1123)
+}
+
+func toJSON(data interface{}) string {
+	json, err := json.Marshal(data)
+	if err != nil {
+		return ""
+	}
+	return string(json)
 }
 
 // for now return the string as it is
@@ -1138,7 +1147,7 @@ func (s *PublicServer) apiSendTx(r *http.Request, apiVersion int) (interface{}, 
 	if r.Method == http.MethodPost {
 		data, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			return nil, api.NewAPIError("Missing read tx blob", true)
+			return nil, api.NewAPIError("Missing tx blob", true)
 		}
 		hex = string(data)
 	} else {

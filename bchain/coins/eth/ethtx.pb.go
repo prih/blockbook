@@ -77,9 +77,6 @@ type ProtoCompleteTransaction_TxType struct {
 	To               []byte `protobuf:"bytes,7,opt,name=To,proto3" json:"To,omitempty"`
 	From             []byte `protobuf:"bytes,8,opt,name=From,proto3" json:"From,omitempty"`
 	TransactionIndex uint32 `protobuf:"varint,9,opt,name=TransactionIndex" json:"TransactionIndex,omitempty"`
-	V                []byte `protobuf:"bytes,10,opt,name=V,proto3" json:"V,omitempty"`
-	R                []byte `protobuf:"bytes,11,opt,name=R,proto3" json:"R,omitempty"`
-	S                []byte `protobuf:"bytes,12,opt,name=S,proto3" json:"S,omitempty"`
 }
 
 func (m *ProtoCompleteTransaction_TxType) Reset()         { *m = ProtoCompleteTransaction_TxType{} }
@@ -141,27 +138,6 @@ func (m *ProtoCompleteTransaction_TxType) GetTo() []byte {
 func (m *ProtoCompleteTransaction_TxType) GetFrom() []byte {
 	if m != nil {
 		return m.From
-	}
-	return nil
-}
-
-func (m *ProtoCompleteTransaction_TxType) GetV() []byte {
-	if m != nil {
-		return m.V
-	}
-	return nil
-}
-
-func (m *ProtoCompleteTransaction_TxType) GetR() []byte {
-	if m != nil {
-		return m.R
-	}
-	return nil
-}
-
-func (m *ProtoCompleteTransaction_TxType) GetS() []byte {
-	if m != nil {
-		return m.S
 	}
 	return nil
 }
